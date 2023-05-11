@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Minhas Notas</title>
+</head>
+<body>
+	<h1>Minhas Notas</h1>
+	<ul id="notas"></ul>
+	
+	<script>
+		// Obtendo as notas do localStorage
+		const notas = JSON.parse(localStorage.getItem("notas")) || [];
+
+		// Adicionando cada nota à lista de notas na página
+		const listaNotas = document.getElementById("notas");
+		notas.forEach(nota => {
+			const li = document.createElement("li");
+			li.innerHTML = `
+				<h3>${nota.titulo}</h3>
+				<p>${nota.texto}</p>
+				<button type="button" class="btn btn-danger" onclick="excluirNota(${nota.id})">Excluir</button>
+
+			`;
+			listaNotas.appendChild(li);
+		});
+
+		// Função para excluir uma nota pelo ID
+		function excluirNota(id) {
+			// Removendo a nota da lista de notas
+			const notaIndex = notas.findIndex(nota => nota.id === id);
+			if (notaIndex !== -1) {
+				notas.splice(notaIndex, 1);
+			}
+			// Atualizando o localStorage com a nova lista de notas
+			localStorage.setItem("notas", JSON.stringify(notas));
+			// Removendo a nota da lista de notas na página
+			const notaLi = document.querySelector(`li[data-id="${id}"]`);
+			if (notaLi) {
+				notaLi.remove();
+			}
+		}
+		
+	</script>
+</body>
+</html>
